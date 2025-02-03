@@ -5,7 +5,14 @@ from docx import Document
 from docx.shared import Pt, Inches
 from bs4 import BeautifulSoup
 import pypandoc
+import pypandoc
 
+# Download Pandoc if it's not already available
+try:
+    pypandoc.get_pandoc_version()
+except OSError:
+    pypandoc.download_pandoc()
+    
 # Connect to SQLite database (or create it if it doesn't exist)
 conn = sqlite3.connect('markdown_files.db', check_same_thread=False)
 c = conn.cursor()
