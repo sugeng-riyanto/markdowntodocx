@@ -1,0 +1,6 @@
+streamlit
+sqlite3
+python-docx
+beautifulsoup4
+pypandoc
+pandoc
