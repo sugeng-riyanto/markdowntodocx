@@ -44,9 +44,6 @@ def delete_file_from_database(file_id):
     conn.commit()
 
 # Function to convert Markdown to DOCX with proper formatting using Pandoc
-import os
-import pypandoc
-
 def markdown_to_docx(md_content, output_filename):
     try:
         # Create a temporary file for Pandoc to write the DOCX output
@@ -71,6 +68,7 @@ def markdown_to_docx(md_content, output_filename):
     except Exception as e:
         st.error(f"Error converting Markdown to DOCX: {e}")
         return False
+
 # Sidebar for navigation
 st.sidebar.title("Navigation")
 page = st.sidebar.radio("Go to", ["Upload Markdown", "View Markdown Files"])
