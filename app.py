@@ -54,7 +54,7 @@ def markdown_to_docx(md_content, output_filename):
         # Create a temporary file for Pandoc to write the DOCX output
         temp_file = "temp_output.docx"
         
-        # Convert Markdown to DOCX using Pandoc with LaTeX math support
+        # Convert Markdown to DOCX using Pandoc with LaTeX math and mhchem support
         output = pypandoc.convert_text(
             md_content,
             'docx',
@@ -64,7 +64,11 @@ def markdown_to_docx(md_content, output_filename):
                 '--mathjax',          # Ensures proper rendering of math equations
                 '--wrap=preserve',    # Preserve formatting of paragraphs
                 '--standalone',       # Include all necessary components in the output
-                '--highlight-style=pygments'  # Improve syntax highlighting for equations
+                '--highlight-style=pygments',  # Improve syntax highlighting for equations
+                '--bibliography',     # Support for citations (if needed)
+                '--citeproc',         # Process citations
+                '--pdf-engine=xelatex',  # Use XeLaTeX for better equation rendering
+                '--metadata=link-citations=true'  # Enable clickable citations
             ]
         )
         
