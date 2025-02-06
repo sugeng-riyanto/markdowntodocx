@@ -2,7 +2,7 @@ import streamlit as st
 import sqlite3
 import os
 from docx import Document
-from docx.shared import Pt, Inches
+from docx.shared import Pt
 import pypandoc
 
 # Download Pandoc if it's not already available
@@ -63,7 +63,8 @@ def markdown_to_docx(md_content, output_filename):
             extra_args=[
                 '--mathjax',          # Ensures proper rendering of math equations
                 '--wrap=preserve',    # Preserve formatting of paragraphs
-                '--standalone'        # Include all necessary components in the output
+                '--standalone',       # Include all necessary components in the output
+                '--highlight-style=pygments'  # Improve syntax highlighting for equations
             ]
         )
         
@@ -94,6 +95,10 @@ def post_process_docx(docx_filename):
             # Adjust font size and spacing for better readability
             for run in paragraph.runs:
                 run.font.size = Pt(11)  # Set font size to 11pt
+            
+            # Ensure block-level equations are centered
+            if paragraph.text.strip().startswith("$$") and paragraph.text.strip().endswith("$$"):
+                paragraph.alignment = 1  # Center alignment
         
         # Save the updated DOCX file
         doc.save(docx_filename)
