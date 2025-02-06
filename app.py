@@ -60,13 +60,21 @@ def markdown_to_docx(md_content, output_filename):
             'docx',
             format='markdown+tex_math_dollars',  # Supports LaTeX-style equations
             outputfile=temp_file,
-            extra_args=['--mathjax']  # Ensures proper rendering of math equations
+            extra_args=[
+                '--mathjax',          # Ensures proper rendering of math equations
+                '--wrap=preserve',    # Preserve formatting of paragraphs
+                '--standalone'        # Include all necessary components in the output
+            ]
         )
         
         # Check if the temporary file was created successfully
         if os.path.exists(temp_file):
             # Rename the temporary file to the desired output filename
             os.rename(temp_file, output_filename)
+            
+            # Post-process the DOCX file to ensure proper formatting
+            post_process_docx(output_filename)
+            
             return True
         else:
             st.error("Error: Temporary DOCX file was not created.")
@@ -74,6 +82,23 @@ def markdown_to_docx(md_content, output_filename):
     except Exception as e:
         st.error(f"Error converting Markdown to DOCX: {e}")
         return False
+
+# Function to post-process the DOCX file
+def post_process_docx(docx_filename):
+    try:
+        # Open the DOCX file
+        doc = Document(docx_filename)
+        
+        # Iterate through all paragraphs
+        for paragraph in doc.paragraphs:
+            # Adjust font size and spacing for better readability
+            for run in paragraph.runs:
+                run.font.size = Pt(11)  # Set font size to 11pt
+        
+        # Save the updated DOCX file
+        doc.save(docx_filename)
+    except Exception as e:
+        st.error(f"Error post-processing DOCX file: {e}")
 
 # Sidebar for navigation
 st.sidebar.title("Navigation")
